@@ -1,20 +1,19 @@
 package com.eshopper.commongateway.dto;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class OrderProductDTO {
-    private Integer id;
-    private String sku;
-    private String name;
-    private String description;
-    private String brandName;
-    private Integer supplierId;
+    private Integer orderId;
+    private Integer productId;
+    private Integer orderNumber;
     private Integer categoryId;
-    private Integer quantityPerUnit;
-    private Float unitPrice;
-    private String color;
+    private Float price;
+    private Integer quantity;
     private Float discount;
-    private Boolean discountAvailable;
-    private String picture;
+    private Integer total;
+    private String skuid;
+    private String size;
+    private String color;
 
 }

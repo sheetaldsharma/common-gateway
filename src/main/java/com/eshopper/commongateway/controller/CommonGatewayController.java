@@ -1,10 +1,7 @@
 package com.eshopper.commongateway.controller;
 
-import com.eshopper.commongateway.dto.OrderDTO;
-import com.eshopper.commongateway.dto.OrderProductDTO;
+import com.eshopper.commongateway.dto.*;
 
-import com.eshopper.commongateway.dto.ProductDTO;
-import com.eshopper.commongateway.dto.UserDTO;
 import com.eshopper.commongateway.repository.CommonGatewayRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +44,7 @@ public class CommonGatewayController {
 
     /****************** ORDER END POINTS - START ******************/
     @GetMapping(path = "/order/all", produces = APPLICATION_JSON_VALUE)
-    public List<OrderDTO> getAllOrdersDetails() {
+    public List<Order> getAllOrdersDetails() {
         return commonGatewayRepository.getAllOrdersDetails();
     }
 
@@ -67,6 +64,12 @@ public class CommonGatewayController {
     @GetMapping(path = "/order/{orderNumber}/product/details", produces = APPLICATION_JSON_VALUE)
     public List<OrderProductDTO> getSpecificOrderDetailsForACustomer(@PathVariable("orderNumber") Integer orderNumber){
         return commonGatewayRepository.getSpecificOrderDetailsForACustomer(orderNumber);
+    }
+
+    @PostMapping(path = "/order/customer/{customerId}/orderPlaced")
+    public Order createOrder(@PathVariable("customerId") Integer customerId, @RequestBody Order order) {
+        System.out.println("==========================================================>" +order.getOrderProductsList().toString());
+        return commonGatewayRepository.createOrder(customerId, order);
     }
     /****************** ORDER END POINTS - END ******************/
 

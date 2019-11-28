@@ -4,10 +4,7 @@ import com.eshopper.commongateway.client.CustomerClient;
 import com.eshopper.commongateway.client.InventoryClient;
 import com.eshopper.commongateway.client.OrderClient;
 import com.eshopper.commongateway.client.PaymentClient;
-import com.eshopper.commongateway.dto.OrderDTO;
-import com.eshopper.commongateway.dto.OrderProductDTO;
-import com.eshopper.commongateway.dto.ProductDTO;
-import com.eshopper.commongateway.dto.UserDTO;
+import com.eshopper.commongateway.dto.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -58,7 +55,7 @@ public class CommonGatewayRepository {
     /****************** CUSTOMER END POINTS - END ******************/
 
     /****************** ORDER END POINTS - START ******************/
-    public List<OrderDTO> getAllOrdersDetails() {
+    public List<Order> getAllOrdersDetails() {
 
         return orderClient.getAllOrdersDetails();
     }
@@ -76,6 +73,11 @@ public class CommonGatewayRepository {
     //Get specific order details including products
     public List<OrderProductDTO> getSpecificOrderDetailsForACustomer(Integer orderNumber) {
         return orderClient.getSpecificOrderDetailsForACustomer(orderNumber);
+    }
+
+    public Order createOrder(@PathVariable("customerId") Integer customerId, @RequestBody Order order) {
+        System.out.println("############################# "+order.getOrderProductsList().toString());
+        return orderClient.createOrder(customerId, order);
     }
     /****************** ORDER END POINTS - END ******************/
 

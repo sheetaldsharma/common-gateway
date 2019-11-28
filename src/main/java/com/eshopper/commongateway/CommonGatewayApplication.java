@@ -11,6 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class CommonGatewayApplication {
 
 	public static void main(String[] args) {
+		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 		SpringApplication.run(CommonGatewayApplication.class, args);
 	}
 

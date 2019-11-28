@@ -1,18 +1,17 @@
 package com.eshopper.commongateway.repository;
 
 import com.eshopper.commongateway.client.CustomerClient;
+import com.eshopper.commongateway.client.InventoryClient;
 import com.eshopper.commongateway.client.OrderClient;
 import com.eshopper.commongateway.client.PaymentClient;
 import com.eshopper.commongateway.dto.OrderDTO;
 import com.eshopper.commongateway.dto.OrderProductDTO;
+import com.eshopper.commongateway.dto.ProductDTO;
 import com.eshopper.commongateway.dto.UserDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +26,9 @@ public class CommonGatewayRepository {
 
     @Autowired
     private OrderClient orderClient;
+
+    @Autowired
+    private InventoryClient inventoryClient;
 
 
 //    public List<OrderDTO> getCustomerAllOrdersDetails(Integer customerId)
@@ -76,4 +78,12 @@ public class CommonGatewayRepository {
         return orderClient.getSpecificOrderDetailsForACustomer(orderNumber);
     }
     /****************** ORDER END POINTS - END ******************/
+
+    /****************** INVENTORY END POINTS - START ******************/
+    public ProductDTO updateProduct(@PathVariable("id") Integer id, @RequestBody ProductDTO product)
+    {
+        System.out.println("========================= updateProduct ----"+product.toString());
+        return inventoryClient.updateProduct(id, product);
+    }
+    /****************** INVENTORY END POINTS - END ******************/
 }

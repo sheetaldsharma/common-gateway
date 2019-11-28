@@ -3,6 +3,7 @@ package com.eshopper.commongateway.controller;
 import com.eshopper.commongateway.dto.OrderDTO;
 import com.eshopper.commongateway.dto.OrderProductDTO;
 
+import com.eshopper.commongateway.dto.ProductDTO;
 import com.eshopper.commongateway.dto.UserDTO;
 import com.eshopper.commongateway.repository.CommonGatewayRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -69,7 +70,14 @@ public class CommonGatewayController {
     }
     /****************** ORDER END POINTS - END ******************/
 
-
+    /****************** INVENTORY END POINTS - START ******************/
+    @PutMapping(path = "/inventory/{id}/updateQuantity")
+    public ProductDTO updateProduct(@PathVariable("id") Integer id, @RequestBody ProductDTO product)
+    {
+        System.out.println("========================= "+product.toString());
+        return commonGatewayRepository.updateProduct(id, product);
+    }
+    /****************** INVENTORY END POINTS - END ******************/
 
 
     //    @GetMapping("/customer/{customerId}/orderDetails")

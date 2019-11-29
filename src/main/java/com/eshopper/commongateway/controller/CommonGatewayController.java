@@ -1,5 +1,6 @@
 package com.eshopper.commongateway.controller;
 
+import ch.lambdaj.Lambda;
 import com.eshopper.commongateway.dto.*;
 
 import com.eshopper.commongateway.repository.CommonGatewayRepository;
@@ -7,6 +8,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,7 +72,16 @@ public class CommonGatewayController {
     @PostMapping(path = "/order/customer/{customerId}/orderPlaced")
     public Order createOrder(@PathVariable("customerId") Integer customerId, @RequestBody Order order) {
         System.out.println("==========================================================>" +order.getOrderProductsList().toString());
+
+//
+//        List<Integer> ids = new ArrayList<>();
+//        List<OrderProducts> orderProductsList = new ArrayList<>();
+//        ids = Lambda.extract(order.getOrderProductsList(), Lambda.on(OrderProducts.class).getProductId());
+//        System.out.println("===================== "+ ids.size());
+//        commonGatewayRepository.updateProduct(order.getCustomerId(), o);
         return commonGatewayRepository.createOrder(customerId, order);
+        //commonGatewayRepository.updateProduct(id, product);
+
     }
     /****************** ORDER END POINTS - END ******************/
 
@@ -80,20 +92,14 @@ public class CommonGatewayController {
         System.out.println("========================= "+product.toString());
         return commonGatewayRepository.updateProduct(id, product);
     }
+
+    @PutMapping(path = "/inventory/multiple/updateQuantity")
+    public List<ProductDTO> updateProduct(@RequestBody  List<ProductDTO> productList)
+    {
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        return commonGatewayRepository.updateProductQuantity(productList);
+    }
+
     /****************** INVENTORY END POINTS - END ******************/
-
-
-    //    @GetMapping("/customer/{customerId}/orderDetails")
-//    public List<OrderDTO> getCustomerAllOrdersDetails(@PathVariable("customerId") Integer customerId)
-//    {
-//        return commonGatewayRepository.getCustomerAllOrdersDetails(customerId);
-//    }
-//
-//    @GetMapping("/customer/{customerId}/order/{orderId}/details")
-//    public List<OrderProductDTO> getCustomerOrderDetails(@PathVariable("customerId") Integer customerId, @PathVariable("orderId") Integer orderId)
-//    {
-//        return commonGatewayRepository.getCustomerOrderDetails(customerId, orderId);
-//
-//    }
 
 }

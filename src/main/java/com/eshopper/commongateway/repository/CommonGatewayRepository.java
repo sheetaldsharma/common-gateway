@@ -88,9 +88,9 @@ public class CommonGatewayRepository {
         return inventoryClient.updateProduct(id, product);
     }
 
-    public List<ProductDTO> updateProductQuantity(List<ProductDTO> productList)
+    public void updateProductQuantity(List<ProductQuantity> productQuantityList)
     {
-        return inventoryClient.updateProductQuantity(productList);
+        inventoryClient.updateProductQuantity(productQuantityList);
     }
     /****************** INVENTORY END POINTS - END ******************/
 }

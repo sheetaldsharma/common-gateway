@@ -1,6 +1,7 @@
 package com.eshopper.commongateway.client;
 
 import com.eshopper.commongateway.dto.ProductDTO;
+import com.eshopper.commongateway.dto.ProductQuantity;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,5 +15,5 @@ public interface InventoryClient {
     public ProductDTO updateProduct(@PathVariable("id") Integer id, @RequestBody ProductDTO product);
 
     @PutMapping(path = "/multiple/updateQuantity")
-    public List<ProductDTO> updateProductQuantity(@RequestBody  List<ProductDTO> productList);
+    public String updateProductQuantity(@RequestBody  List<ProductQuantity> productQuantityList);
 }

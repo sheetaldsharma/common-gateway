@@ -94,10 +94,11 @@ public class CommonGatewayController {
     }
 
     @PutMapping(path = "/inventory/multiple/updateQuantity")
-    public List<ProductDTO> updateProduct(@RequestBody  List<ProductDTO> productList)
+    public String updateProduct(@RequestBody  List<ProductQuantity> productQuantityList)
     {
         System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        return commonGatewayRepository.updateProductQuantity(productList);
+        commonGatewayRepository.updateProductQuantity(productQuantityList);
+        return "UpdatedProductQuantity";
     }
 
     /****************** INVENTORY END POINTS - END ******************/

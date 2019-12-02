@@ -1,6 +1,7 @@
 package com.eshopper.commongateway.controller;
 
 import ch.lambdaj.Lambda;
+import com.eshopper.commongateway.client.InventoryClient;
 import com.eshopper.commongateway.dto.*;
 
 import com.eshopper.commongateway.repository.CommonGatewayRepository;
@@ -8,10 +9,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -21,6 +20,9 @@ public class CommonGatewayController {
     @Autowired
     CommonGatewayRepository commonGatewayRepository;
 
+
+    @Autowired
+    InventoryClient inventoryClient;
 
 
     /****************** CUSTOMER END POINTS - START ******************/
@@ -72,15 +74,20 @@ public class CommonGatewayController {
     @PostMapping(path = "/order/customer/{customerId}/orderPlaced")
     public Order createOrder(@PathVariable("customerId") Integer customerId, @RequestBody Order order) {
         System.out.println("==========================================================>" +order.getOrderProductsList().toString());
+        Order placedOrder = commonGatewayRepository.createOrder(customerId, order);
 
-//
-//        List<Integer> ids = new ArrayList<>();
-//        List<OrderProducts> orderProductsList = new ArrayList<>();
-//        ids = Lambda.extract(order.getOrderProductsList(), Lambda.on(OrderProducts.class).getProductId());
-//        System.out.println("===================== "+ ids.size());
-//        commonGatewayRepository.updateProduct(order.getCustomerId(), o);
-        return commonGatewayRepository.createOrder(customerId, order);
-        //commonGatewayRepository.updateProduct(id, product);
+        Map<Integer, Integer> productOrderList = new HashMap<>();
+
+        List<ProductQuantity> temp = new ArrayList<>();
+        for (OrderProducts orderProducts: order.getOrderProductsList()) {
+            ProductQuantity productQuantity1  = new ProductQuantity();
+            productQuantity1.setProductId(orderProducts.getProductId());
+            productQuantity1.setQuantity(orderProducts.getQuantity());
+            temp.add(productQuantity1);
+        }
+        System.out.println("temp ==> "+temp.toString());
+        inventoryClient.updateProductQuantity(temp);
+        return placedOrder;
 
     }
     /****************** ORDER END POINTS - END ******************/

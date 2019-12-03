@@ -6,6 +6,7 @@ import com.eshopper.commongateway.dto.*;
 
 import com.eshopper.commongateway.repository.CommonGatewayRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping(value = "/api/gateway")
+
 public class CommonGatewayController {
     @Autowired
     CommonGatewayRepository commonGatewayRepository;
@@ -48,6 +50,7 @@ public class CommonGatewayController {
     /****************** CUSTOMER END POINTS - END ******************/
 
     /****************** ORDER END POINTS - START ******************/
+//    @HystrixCommand(fallbackMethod = "orderGetAll")
     @GetMapping(path = "/order/all", produces = APPLICATION_JSON_VALUE)
     public List<Order> getAllOrdersDetails() {
         return commonGatewayRepository.getAllOrdersDetails();
@@ -72,6 +75,7 @@ public class CommonGatewayController {
     }
 
     @PostMapping(path = "/order/customer/{customerId}/orderPlaced")
+    @HystrixCommand(fallbackMethod = "orderPlacedFallBack")
     public Order createOrder(@PathVariable("customerId") Integer customerId, @RequestBody Order order) {
         System.out.println("==========================================================>" +order.getOrderProductsList().toString());
         Order placedOrder = commonGatewayRepository.createOrder(customerId, order);
@@ -89,6 +93,18 @@ public class CommonGatewayController {
         inventoryClient.updateProductQuantity(temp);
         return placedOrder;
 
+    }
+    public Order orderPlacedFallBack()
+    {
+        System.out.println("Fallback");
+        return new Order();
+    }
+
+    public List<Order> orderGetAll()
+    {
+        System.out.println("Fallback orderGetAll");
+        List<Order> orders = new ArrayList<>();
+        return orders;
     }
     /****************** ORDER END POINTS - END ******************/
 

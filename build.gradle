@@ -45,6 +45,13 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     compile 'com.googlecode.lambdaj:lambdaj:2.3.3'
+    testCompile 'junit:junit:4.12'
+//    implementation ('io.pivotal.spring.cloud:spring-cloud-services-starter-circuit-breaker:1.0.1.RELEASE'){
+//        exclude group:'org.springframework.integration', module: 'spring-integration-java-dsl'
+//    }
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
+//    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard'
+
 }
 
 dependencyManagement {

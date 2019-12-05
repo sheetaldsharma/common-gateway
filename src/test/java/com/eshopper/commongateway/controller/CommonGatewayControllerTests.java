@@ -1,6 +1,7 @@
 package com.eshopper.commongateway.controller;
 
 import com.eshopper.commongateway.dto.UserDTO;
+import com.eshopper.commongateway.exception.CustomerServiceException;
 import com.eshopper.commongateway.repository.CommonGatewayRepository;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -141,6 +142,23 @@ public class CommonGatewayControllerTests {
                         .content(asJsonString(user)))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
+
+    }
+
+    @Test
+    public void shouldGetCustomerDetails() throws Exception {
+        UserDTO user = getUserDTOTestData1();
+
+        Optional<UserDTO> tempUser = Optional.empty();
+        given(commonGatewayRepository.getCustomerDetails(100)).willReturn(tempUser);
+        mockMvc.perform(get("/customer/{customerId}/personalDetails", user.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("firstName").value("AA"))
+                .andExpect(jsonPath("id").value(1))
+                .andDo(MockMvcResultHandlers.print());
+        verify(commonGatewayRepository, times(1)).getCustomerDetails(100);
+        verifyNoMoreInteractions(commonGatewayRepository);
 
     }
 }

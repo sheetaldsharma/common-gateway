@@ -3,18 +3,16 @@ package com.eshopper.commongateway.repository;
 import com.eshopper.commongateway.client.CustomerClient;
 import com.eshopper.commongateway.client.InventoryClient;
 import com.eshopper.commongateway.client.OrderClient;
-import com.eshopper.commongateway.client.PaymentClient;
 import com.eshopper.commongateway.dto.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.eshopper.commongateway.exception.CustomerServiceException;
+import com.eshopper.commongateway.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Repository
 public class CommonGatewayRepository {
@@ -39,17 +37,35 @@ public class CommonGatewayRepository {
 //
 //    }
     /****************** CUSTOMER END POINTS - START ******************/
-    public UserDTO registerCustomer(UserDTO user)
+    public User registerCustomer(User user)
     {
         return customerClient.registerCustomer(user);
     }
 
-    public Optional<UserDTO> getCustomerDetails(Integer customerId)
+    public Optional<User> getCustomerDetails(Integer customerId) throws CustomerServiceException
     {
-        return customerClient.getCustomerDetails(customerId);
+        System.out.println("------------> before customerClient.getCustomerDetails");
+        Optional<User> user = Optional.empty();
+        try {
+            user = customerClient.getCustomerDetails(customerId);
+            throw new CustomerServiceException();
+
+        }catch(CustomerServiceException e)
+        {
+            System.out.println(e.getErrorMessage());
+        }
+//
+//
+//        if(user.isEmpty())
+//        {
+//            throw new CustomerServiceException("Customer Not found repository");
+//        }
+
+        System.out.println("------------> after customerClient.getCustomerDetails");
+        return user;
     }
 
-    public List<UserDTO> getAllCustomer() {
+    public List<User> getAllCustomer() {
         return customerClient.getAllCustomer();
     }
     /****************** CUSTOMER END POINTS - END ******************/

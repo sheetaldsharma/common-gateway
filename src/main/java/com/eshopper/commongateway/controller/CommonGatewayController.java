@@ -22,19 +22,17 @@ public class CommonGatewayController {
     @Autowired
     CommonGatewayRepository commonGatewayRepository;
 
-
     @Autowired
     InventoryClient inventoryClient;
 
-
-    /****************** CUSTOMER END POINTS - START ******************/
+    /************************************ CUSTOMER END POINTS - START *************************************/
     @PostMapping(value = "/customer/register")
     public UserDTO registerCustomer(@RequestBody UserDTO user)
     {
         return commonGatewayRepository.registerCustomer(user);
     }
 
-    /* Get CUtomer personal details */
+    /* Get Customer personal details */
     @GetMapping(value = "/customer/{customerId}/personalDetails")
     public Optional<UserDTO> getCustomerDetails(@PathVariable("customerId") Integer customerId)
     {
@@ -47,9 +45,9 @@ public class CommonGatewayController {
     {
         return commonGatewayRepository.getAllCustomer();
     }
-    /****************** CUSTOMER END POINTS - END ******************/
+    /************************************ CUSTOMER END POINTS - END *************************************/
 
-    /****************** ORDER END POINTS - START ******************/
+    /************************************ ORDER END POINTS - START *************************************/
 //    @HystrixCommand(fallbackMethod = "orderGetAll")
     @GetMapping(path = "/order/all", produces = APPLICATION_JSON_VALUE)
     public List<Order> getAllOrdersDetails() {
@@ -75,7 +73,7 @@ public class CommonGatewayController {
     }
 
     @PostMapping(path = "/order/customer/{customerId}/orderPlaced")
-    @HystrixCommand(fallbackMethod = "orderPlacedFallBack")
+    @HystrixCommand(defaultFallback = "orderPlacedFallBack")
     public Order createOrder(@PathVariable("customerId") Integer customerId, @RequestBody Order order) {
         System.out.println("==========================================================>" +order.getOrderProductsList().toString());
         Order placedOrder = commonGatewayRepository.createOrder(customerId, order);
@@ -106,9 +104,9 @@ public class CommonGatewayController {
         List<Order> orders = new ArrayList<>();
         return orders;
     }
-    /****************** ORDER END POINTS - END ******************/
+    /************************************ CUSTOMER END POINTS - END *************************************/
 
-    /****************** INVENTORY END POINTS - START ******************/
+    /************************************ INVENTORY END POINTS - START **********************************/
     @PutMapping(path = "/inventory/{id}/updateQuantity")
     public ProductDTO updateProduct(@PathVariable("id") Integer id, @RequestBody ProductDTO product)
     {
@@ -124,6 +122,6 @@ public class CommonGatewayController {
         return "UpdatedProductQuantity";
     }
 
-    /****************** INVENTORY END POINTS - END ******************/
+    /************************************ INVENTORY END POINTS - END *************************************/
 
 }

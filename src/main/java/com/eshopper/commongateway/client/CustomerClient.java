@@ -18,7 +18,7 @@ public interface CustomerClient {
     @PostMapping("/customer/register")
     public UserDTO registerCustomer(@RequestBody UserDTO user);
 
-    /* Get CUtomer personal details */
+    /* Get Customer personal details */
     @GetMapping("/customer/{customerId}/personalDetails")
     public Optional<UserDTO> getCustomerDetails(@PathVariable("customerId") Integer customerId);
 
@@ -27,16 +27,5 @@ public interface CustomerClient {
     public List<UserDTO> getAllCustomer();
 
     /****************** CUSTOMER END POINTS - END ******************/
-
-//    @GetMapping("/customer/{customerId}/orderDetails")
-//    public List<OrderDTO> getCustomerAllOrdersDetails(@PathVariable("customerId") Integer customerId);
-//
-//
-//    @GetMapping("/customer/{customerId}/{orderId}/orderDetails")
-//    public OrderDTO getCustomerOrderDetails(@PathVariable("customerId") Integer customerId, @PathVariable("orderId") Integer orderId);
-
-
-
-
 }
 

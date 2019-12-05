@@ -11,7 +11,6 @@ import java.util.List;
 public interface InventoryClient {
 
     @PutMapping(value = "/{id}/updateQuantity")
-    //@PutMapping(path = "/inventory/{id}/updateQuantity")
     public ProductDTO updateProduct(@PathVariable("id") Integer id, @RequestBody ProductDTO product);
 
     @PutMapping(path = "/multiple/updateQuantity")

@@ -1,97 +1,146 @@
 package com.eshopper.commongateway.controller;
 
-import com.eshopper.commongateway.dto.Order;
-import com.eshopper.commongateway.dto.OrderProducts;
-import com.eshopper.commongateway.dto.ProductQuantity;
+import com.eshopper.commongateway.dto.UserDTO;
 import com.eshopper.commongateway.repository.CommonGatewayRepository;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
+import org.springframework.cloud.openfeign.ribbon.FeignRibbonClientAutoConfiguration;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+@RunWith(SpringRunner.class)
+@WebMvcTest(CommonGatewayController.class)
+@ImportAutoConfiguration({RibbonAutoConfiguration.class, FeignRibbonClientAutoConfiguration.class, FeignAutoConfiguration.class})
 public class CommonGatewayControllerTests {
-    @Mock
+    @MockBean
     CommonGatewayRepository commonGatewayRepository;
 
     @InjectMocks
-    CommonGatewayControllerTests commonGatewayController;
+    CommonGatewayControllerTests commonGatewayControllerTests;
+
+    @Autowired
+    MockMvc mockMvc;
+
+    public UserDTO getUserDTOTestData1()
+    {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.now();
+
+        UserDTO user1 = new UserDTO();
+        user1.setId(1);
+        user1.setActive(true);
+        user1.setAddress1("AA");
+        user1.setAddress2("BB");
+        user1.setBirthdate(new Date());
+        user1.setCountry("AA");
+        user1.setEmail("AA@gmail.com");
+        user1.setLastName("AA");
+        user1.setMiddleName("AA");
+        user1.setPassword("AA");
+        user1.setPhone1(12);
+        user1.setCity("AA");
+        user1.setPhone2(23);
+        user1.setFirstName("AA");
+        user1.setPostalCode(1234);
+        user1.setRegistrationDate(new Date());
+        user1.setRoleId(1);
+        user1.setState("AA");
+        user1.setRoleId(1);
+        return user1;
+
+    }
+
+    public UserDTO getUserDTOTestData2()
+    {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.now();
+
+        UserDTO user2 = new UserDTO();
+        user2.setId(2);
+        user2.setActive(true);
+        user2.setAddress1("BB");
+        user2.setAddress2("BB");
+        user2.setBirthdate(new Date());
+        user2.setCity("BB");
+        user2.setCountry("BB");
+        user2.setEmail("BB@gmail.com");
+        user2.setFirstName("BB");
+        user2.setLastName("BB");
+        user2.setMiddleName("BB");
+        user2.setPassword("AA");
+        user2.setPhone1(12);
+        user2.setPhone2(23);
+        user2.setPostalCode(1234);
+        user2.setRegistrationDate(new Date());
+        user2.setRoleId(1);
+        user2.setState("BB");
+        user2.setRoleId(1);
+
+        return user2;
+
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Test
-    public void shouldReturnProductQuantityList() {
-        Order order = new Order();
+    public void shouldRegisterCustomer() throws Exception {
+        UserDTO user = getUserDTOTestData1();
 
-        order.setId(25);
-        order.setCustomerId(1);
-        order.setOrderStatusId(1);
-        order.setShippingAddress("Add1");
-        order.setBillingAddress("Add1");
-        order.setInvoiceDate(new Date());
-        order.setDeliveryDate(new Date());
-        order.setPaymentId(1);
-        order.setPaymentStatus(1);
-        order.setPaymentDate(new Date());
-        order.setShippmentCompanyId(1);
-        order.setTotal(100f);
-        order.setDiscount(10f);
-        order.setTax(1f);
-        List<OrderProducts> orderProductsList = new ArrayList<>();
+        when(commonGatewayRepository.registerCustomer(user)).thenReturn(user);
 
-        OrderProducts orderProduct1 = new OrderProducts();
-        OrderProducts orderProduct2 = new OrderProducts();
-        orderProduct1.setOrderId(8);
-        orderProduct1.setProductId(1);
-        orderProduct1.setOrderNumber(25);
-        orderProduct1.setCategoryId(1);
-        orderProduct1.setPrice(100f);
-        orderProduct1.setQuantity(50);
-        orderProduct1.setDiscount(1f);
-        orderProduct1.setTotal(10);
-        orderProduct1.setSkuid("AA");
-        orderProduct1.setSize("M");
-        orderProduct1.setColor("Red");
-
-        orderProduct2.setOrderId(8);
-        orderProduct2.setProductId(1);
-        orderProduct2.setOrderNumber(25);
-        orderProduct2.setCategoryId(1);
-        orderProduct2.setPrice(100f);
-        orderProduct2.setQuantity(50);
-        orderProduct2.setDiscount(1f);
-        orderProduct2.setTotal(10);
-        orderProduct2.setSkuid("AA");
-        orderProduct2.setSize("M");
-        orderProduct2.setColor("Red");
-        orderProductsList.add(orderProduct1);
-        orderProductsList.add(orderProduct2);
-        order.setOrderProductsList(orderProductsList);
-
-        List<ProductQuantity> productQuantityList = new ArrayList<>();
-        ProductQuantity productQuantity1 = new ProductQuantity();
-        ProductQuantity productQuantity2 = new ProductQuantity();
-
-        productQuantity1.setId(1);
-        productQuantity1.setProductId(1);
-        productQuantity1.setQuantity(5);
-
-        productQuantity2.setId(1);
-        productQuantity2.setProductId(1);
-        productQuantity2.setQuantity(5);
-
-        productQuantityList.add(productQuantity1);
-        productQuantityList.add(productQuantity2);
-
-//        given(commonGatewayRepository.createOrder(order.getCustomerId(), order)).willReturn(order);
-//
-//        //given(commonGatewayRepository.updateProductQuantity(productQuantityList)).willReturn("UpdatedProductQuantity");
-//        assertEquals("UpdatedProductQuantity",given(commonGatewayRepository.updateProductQuantity(productQuantityList)).willReturn("UpdatedProductQuantity"));
-
-
+        System.out.println("size ==>"+user.toString());
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/gateway/customer/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(user)))
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print());
 
     }
 }

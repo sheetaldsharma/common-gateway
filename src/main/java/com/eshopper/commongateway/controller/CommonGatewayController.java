@@ -31,7 +31,7 @@ public class CommonGatewayController {
 
     /************************************ CUSTOMER END POINTS - START *************************************/
     @PostMapping(value = "/customer/register")
-    @HystrixCommand(defaultFallback = "getCustomerDetailsFallback")
+    //@HystrixCommand(defaultFallback = "getCustomerDetailsFallback")
     public User registerCustomer(@RequestBody User user)
     {
         return commonGatewayRepository.registerCustomer(user);
@@ -45,7 +45,6 @@ public class CommonGatewayController {
         System.out.println("ResponseEntity.errorcode =====");
         System.out.println("------------> before commonGatewayRepository.getCustomerDetails");
         Optional<User> user = commonGatewayRepository.getCustomerDetails(customerId);
-
         System.out.println("------------> after commonGatewayRepository.getCustomerDetails");
         System.out.println("------------>"+user.toString());
 //

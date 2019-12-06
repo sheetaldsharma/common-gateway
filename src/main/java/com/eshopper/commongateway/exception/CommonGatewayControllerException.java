@@ -1,24 +1,11 @@
 package com.eshopper.commongateway.exception;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
-import net.minidev.json.JSONObject;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import static org.hibernate.internal.util.collections.ArrayHelper.toList;
 
 @ControllerAdvice
 public class CommonGatewayControllerException {
@@ -48,10 +35,22 @@ public class CommonGatewayControllerException {
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(FeignException.InternalServerError.class)
+    public ResponseEntity<ErrorResponse> handleFeignClientExceptionInterServerError(FeignException ex) {
+        System.out.println("===========> handleFeignException");
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        errorResponse.setErrorMessage(ex.getMessage());
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 //    @ExceptionHandler(FeignException.BadRequest.class)
-//    public Map<String, Object> handleFeignStatusException(FeignException e, HttpServletResponse response) throws IOException {
+//    public ResponseEntity<ErrorResponse> handleFeignStatusException(FeignException e, HttpServletResponse response) throws IOException {
+//        Gson gson = new Gson();
+////        gson.fromJson(jsonString, MyClass.class);
+//        ErrorResponse errorResponse = gson.fromJson(String.valueOf(e), ErrorResponse.class);
 //        response.setStatus(e.status());
-//        return new JSONObject(e.contentUTF8()).toMap();
+//        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
 //    }
 }
 

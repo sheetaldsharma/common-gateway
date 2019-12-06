@@ -9,14 +9,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Setter
 public class CommonGatewayServiceException extends Exception {
     private String errorMessage;
-    private String moduleName;
-    private String functionName;
 
-    public CommonGatewayServiceException(String errorMessage, String moduleName, String functionName) {
+    public CommonGatewayServiceException(String errorMessage) {
         super(errorMessage);
         this.errorMessage = errorMessage;
-        this.moduleName = moduleName;
-        this.functionName = functionName;
     }
 
     public CommonGatewayServiceException() {
